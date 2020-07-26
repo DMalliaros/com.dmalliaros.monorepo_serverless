@@ -1,0 +1,10 @@
+{
+  "name": "com.dmalliaros.monorepo_serverless.lib.layer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "moment": "2.15.0"
+  }
+}

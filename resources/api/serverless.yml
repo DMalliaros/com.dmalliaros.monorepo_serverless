@@ -1,0 +1,44 @@
+app: ${opt:app, 'my-app'}
+service: api
+
+provider:
+  name: aws
+  runtime: ${opt:runtime, 'nodejs12.x'}
+  stackName: ${self:app}-${self:provider.stage}-${self:provider.region}-${self:service}
+  apiName: ${self:app}-${self:provider.stage}
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'eu-west-1'}
+  deploymentBucket:
+    name: ${cf:${self:custom.outputs.s3}.infrastructureBucketName}
+  deploymentPrefix: ${self:service}
+
+custom:
+  apiPrifix: info
+  resourceNamePrefix: ${self:app}-${self:provider.stage}-${self:service}
+  outputs:
+    s3: ${self:app}-${self:provider.stage}-${self:provider.region}-s3
+
+functions:
+  health:
+    name: ${self:custom.resourceNamePrefix}-health
+    handler: src/handler.health
+    events:
+      - http:
+          path: ${self:custom.apiPrifix}/health
+          method: GET
+          cors: true
+
+resources:
+  Outputs:
+    ApiId:
+      Value:
+        Ref: ApiGatewayRestApi
+      Export:
+        Name: ApiId
+    ApiResourceId:
+      Value:
+        Fn::GetAtt:
+          - ApiGatewayRestApi
+          - RootResourceId
+      Export:
+        Name: ApiResourceId

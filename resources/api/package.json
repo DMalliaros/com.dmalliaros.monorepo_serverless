@@ -1,0 +1,7 @@
+{
+  "name": "com.dmalliaros.monorepo_serverless.resources.api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true
+}

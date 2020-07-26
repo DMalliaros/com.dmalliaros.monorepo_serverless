@@ -1,0 +1,49 @@
+app: ${opt:app, 'my-app'}
+service: service-hello
+
+provider:
+  name: aws
+  runtime: ${opt:runtime, 'nodejs12.x'}
+  stackName: ${self:app}-${self:provider.stage}-${self:provider.region}-${self:service}
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'eu-west-1'}
+  memorySize: 128
+  deploymentBucket:
+    name: ${cf:${self:custom.outputs.s3}.infrastructureBucketName}
+  deploymentPrefix: ${self:service}
+  apiGateway:
+    restApiId: ${cf:${self:custom.outputs.api}.ApiId}
+    restApiRootResourceId: ${cf:${self:custom.outputs.api}.ApiResourceId}
+
+custom:
+  outputs:
+    api: ${self:app}-${self:provider.stage}-${self:provider.region}-api
+    s3: ${self:app}-${self:provider.stage}-${self:provider.region}-s3
+    layer: ${self:app}-${self:provider.stage}-${self:provider.region}-layer
+  apiPrifix: v1/hello
+  resourceNamePrefix: ${self:app}-${self:provider.stage}-${self:service}
+
+package:
+  exclude:
+    - node_modules/**
+    - .serverless/**
+
+layers:
+  nodeCommon:
+    name: ${self:custom.resourceNamePrefix}-node-layer
+    path: node_modules
+    compatibleRuntimes:
+      - nodejs12.x
+
+functions:
+  hello:
+    name: ${self:custom.resourceNamePrefix}-hello
+    handler: src/handler.hello
+    layers:
+      - Ref: NodeCommonLambdaLayer
+      - ${cf:${self:custom.outputs.layer}.LibLayerLambdaLayerQualifiedArn}
+    events:
+      - http:
+          path: ${self:custom.apiPrifix}/hello
+          method: get
+          cors: true

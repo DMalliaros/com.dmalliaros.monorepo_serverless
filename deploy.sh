@@ -17,6 +17,7 @@ function install_cdk() {
 export DEPLOY_APP="my-app"
 export DEPLOY_REGION="eu-west-1"
 export DEPLOY_STAGE="dev"
+SECONDS=0
 
 cd resources/s3 && install_cdk && cd ../../
 
@@ -26,4 +27,5 @@ cd lib/layer && install_and_package && cd ../../
 
 cd services/hello && install_and_package && cd ../../
 
-
+duration=$SECONDS
+echo "Deploy in $(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."

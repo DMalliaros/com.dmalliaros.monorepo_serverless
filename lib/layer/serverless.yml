@@ -19,6 +19,6 @@ custom:
 layers:
   libLayer:
     name: ${self:custom.resourceNamePrefix}-node-layer
-    path: src
+    path: dist
     compatibleRuntimes:
       - nodejs12.x

@@ -5,6 +5,15 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "moment": "2.19.3"
+    "@types/node": "^14.6.2",
+    "copyfiles": "^2.3.0",
+    "typescript": "^4.0.2"
+  },
+  "scripts": {
+    "compile": "tsc",
+    "copy": "copyfiles -f ./src/package-lock.json ./src/package.json ./dist/nodejs/node_modules/response_layer",
+    "install-src-dependencies": "cd ./src && yarn install --frozen-lockfile",
+    "install-dist-dependencies": "cd .dist/nodejs/node_modules/response_layer && yarn install --frozen-lockfile --only=prod",
+    "build": "yarn run install-src-dependencies && yarn install --frozen-lockfile && yarn run compile && yarn run copy && yarn run install-dist-dependencies"
   }
 }

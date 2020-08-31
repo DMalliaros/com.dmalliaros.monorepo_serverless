@@ -23,27 +23,30 @@ custom:
   apiPrifix: v1/hello
   resourceNamePrefix: ${self:app}-${self:provider.stage}-${self:service}
 
+plugins:
+  - serverless-plugin-typescript
+
 package:
   exclude:
     - node_modules/**
     - .serverless/**
 
-layers:
-  nodeCommon:
-    name: ${self:custom.resourceNamePrefix}-node-layer
-    path: node_modules
-    compatibleRuntimes:
-      - nodejs12.x
+# layers:
+#   nodeCommon:
+#     name: ${self:custom.resourceNamePrefix}-node-layer
+#     path: node_modules
+#     compatibleRuntimes:
+#       - nodejs12.x
 
 functions:
   hello:
-    name: ${self:custom.resourceNamePrefix}-hello
-    handler: src/handler.hello
+    name: ${self:custom.resourceNamePrefix}-hello-create
+    handler: src/handler.create
     layers:
-      - Ref: NodeCommonLambdaLayer
+      # - Ref: NodeCommonLambdaLayer
       - ${cf:${self:custom.outputs.layer}.LibLayerLambdaLayerQualifiedArn}
     events:
       - http:
           path: ${self:custom.apiPrifix}/hello
-          method: get
+          method: post
           cors: true

@@ -3,5 +3,14 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "scripts": {
+    "build": "yarn install --frozen-lockfile"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.51",
+    "serverless-plugin-typescript": "^1.1.9",
+    "typescript": "^3.9.7",
+    "response_layer": "file:../../lib/layer/dist/nodejs/node_modules/response_layer"
+  }
 }

@@ -11,9 +11,9 @@ const region = process.env.DEPLOY_REGION || "eu-west-1"
 const app = new cdk.App();
 const service = "s3"
 
-new S3Stack(app, `${appName}-${stage}-${region}-${service}`,{ 
-    env: {  
-      region: region
+new S3Stack(app, `${appName}-${stage}-${region}-${service}`, {
+  env: {
+    region: region
   },
   stage: stage,
   appName: appName
